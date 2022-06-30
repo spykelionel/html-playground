@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      /* * {
+        width: 100;
+      } */
+      .content {
+        position: relative;
+        padding: 5px;
+      }
+      .content div {
+        color: transparent;
+        background-color: transparent;
+      }
+
+      .content p {
+        pointer-events: none;
+        position: absolute;
+        top: -12px;
+        max-width: 200px;
+      }
+
+      .green {
+        color: green;
+      }
+    </style>
+  </head>
+  <body id="body">
+    <input type="text" name="text" id="textBox" placeholder="text" />
+    
+    <div class="content">
+      <div id="editable" contenteditable="true"></div>
+    <p>here..</p>
+    </div>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <script>
+      function setCaretPosition(elemId, caretPos) {
+        var elem = document.getElementById(elemId);
+
+        if (elem != null) {
+          if (elem.createTextRange) {
+            var range = elem.createTextRange();
+            range.move("character", caretPos);
+            range.select();
+          } else {
+            if (elem.selectionStart) {
+              elem.focus();
+              elem.setSelectionRange(caretPos, caretPos);
+            } else elem.focus();
+          }
+        }
+      }
+      function setTextAreasOnFocus() {
+/***
+ * This function will force the keyboard caret to be positioned
+ * at the end of all textareas when they receive focus.
+ */
+    var mydiv = document.getElementById('editable');
+    mydiv.oninput = function(e) {
+      console.log("received a focus:", e)
+            setCaretPosition(mydiv, mydiv.textContent.length);
+        }
+    
+}
+      $("#editable").on("input", function (e) {
+        let current = $(this).val();
+        let copyof = e.target.textContent.split(" ");
+        let htmlStr = "";
+        // console.log(copyof = e.target.textContent)
+        copyof.forEach((element) => {
+          htmlStr += `<span>${element}</span>&nbsp;`;
+        });
+        $("p").html(htmlStr);
+        let span = $("p span").toArray();
+        span.forEach((s) => {
+          if (s.outerText == "one") {
+            s.classList.add("green");
+          }
+        });
+      });
+    </script>
+  </body>
+</html>
